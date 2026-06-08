@@ -1,5 +1,5 @@
 const ZGG = {
-    BASE_URL: "https://cdn.jsdelivr.net/gh/Zenith-UB/ZGG.js@main/",
+    BASE_URL: "https://cdn.jsdelivr.net/gh/Zenith-UB/ZGG.js@latest/",
     JSON_FILE: "g.json",
 
     async init(gridSelector, cardsAcross = 5) {
