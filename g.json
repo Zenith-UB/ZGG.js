@@ -1,0 +1,12 @@
+[
+  {
+    "title": "Example Game 1",
+    "image": "img/example1.png",
+    "game": "g/example1/index.html"
+  },
+  {
+    "title": "Example Game 2",
+    "image": "img/example2.png",
+    "game": "g/example2/index.html"
+  }
+]
