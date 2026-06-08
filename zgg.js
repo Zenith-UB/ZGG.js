@@ -1,59 +1,63 @@
 const ZGG = {
     BASE_URL: "https://cdn.jsdelivr.net/gh/Zenith-UB/ZGG.js/",
+    JSON_FILE: "g.json",
 
-    async init(gridSelector, cardsAcross = 5, jsonFile = "g.json") {
+    async init(gridSelector, cardsAcross = 5) {
         const grid = document.querySelector(gridSelector);
 
         if (!grid) {
-            console.error("Grid not found:", gridSelector);
+            console.error("Grid not found.");
             return;
         }
 
         grid.innerHTML = "";
+
         grid.style.display = "grid";
-        grid.style.gridTemplateColumns = `repeat(${cardsAcross}, minmax(0, 1fr))`;
+        grid.style.gridTemplateColumns =
+            `repeat(${cardsAcross}, minmax(0,1fr))`;
         grid.style.gap = "16px";
 
         this.createOverlay();
 
-        try {
-            const games = await fetch(jsonFile).then(r => r.json());
+        const games = await fetch(
+            this.BASE_URL + this.JSON_FILE
+        ).then(r => r.json());
 
-            for (const game of games) {
-                const card = document.createElement("div");
+        for (const game of games) {
+            const card = document.createElement("div");
 
-                card.className = "zgg-card";
-                card.style.cursor = "pointer";
-                card.style.textAlign = "center";
+            card.className = "zgg-card";
+            card.style.cursor = "pointer";
+            card.style.textAlign = "center";
 
-                const img = document.createElement("img");
-                img.src = this.BASE_URL + game.image;
-                img.alt = game.title;
-                img.style.width = "100%";
-                img.style.aspectRatio = "1";
-                img.style.objectFit = "cover";
-                img.style.display = "block";
+            const image = document.createElement("img");
+            image.src = this.BASE_URL + game.image;
+            image.alt = game.title;
+            image.style.width = "100%";
+            image.style.aspectRatio = "1";
+            image.style.objectFit = "cover";
+            image.style.display = "block";
 
-                const title = document.createElement("div");
-                title.textContent = game.title;
-                title.style.marginTop = "8px";
+            const title = document.createElement("div");
+            title.textContent = game.title;
+            title.style.marginTop = "8px";
 
-                card.appendChild(img);
-                card.appendChild(title);
+            card.appendChild(image);
+            card.appendChild(title);
 
-                card.addEventListener("click", () => {
-                    this.openGame(this.BASE_URL + game.game);
-                });
+            card.onclick = () => {
+                this.openGame(
+                    this.BASE_URL + game.game
+                );
+            };
 
-                grid.appendChild(card);
-            }
-        } catch (err) {
-            console.error("ZGG:", err);
+            grid.appendChild(card);
         }
     },
 
     createOverlay() {
-        if (document.getElementById("zgg-overlay")) return;
+        if (document.getElementById("zgg-overlay"))
+            return;
 
         const overlay = document.createElement("div");
         overlay.id = "zgg-overlay";
@@ -62,19 +66,8 @@ const ZGG = {
             position: "fixed",
             inset: "0",
             background: "rgba(0,0,0,.9)",
-            display: "none",
-            zIndex: "999999"
-        });
-
-        const close = document.createElement("button");
-        close.textContent = "✕";
-
-        Object.assign(close.style, {
-            position: "absolute",
-            top: "10px",
-            right: "10px",
-            zIndex: "1000000",
-            cursor: "pointer"
+            zIndex: "999999",
+            display: "none"
         });
 
         const iframe = document.createElement("iframe");
@@ -83,6 +76,18 @@ const ZGG = {
             width: "100%",
             height: "100%",
             border: "none"
+        });
+
+        const close = document.createElement("button");
+
+        close.textContent = "✕";
+
+        Object.assign(close.style, {
+            position: "absolute",
+            top: "10px",
+            right: "10px",
+            zIndex: "1000000",
+            cursor: "pointer"
         });
 
         close.onclick = () => {
